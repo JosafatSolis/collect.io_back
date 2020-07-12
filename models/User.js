@@ -9,7 +9,7 @@ const userSchema = new Schema({
         validate: {
             message: "This email is already in use",
             validator: async (email) => {
-                const items = await mongoose.model("User").count({ email });
+                const items = await mongoose.model("User").countDocuments({ email });
                 return items === 0;
             }
         }

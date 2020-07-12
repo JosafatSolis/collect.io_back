@@ -9,7 +9,7 @@ const cors = require('cors');
 mongoose.connect(process.env.DB, {
     useNewUrlParser: true,
     useUnifiedTopology: true
-}).then(x => console.log(`Connected to Mongo! Database name: ${x.connections[0].name}`))
+}).then(x => console.log(`Connected to Mongo! Databa  se name: ${x.connections[0].name}`))
 .catch(err => console.log("Error connecting to Mongo: ", err));
 
 const app = express();
@@ -27,8 +27,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
+const formatsRouter = require('./routes/formats');
+const recordsRouter = require('./routes/records');
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/formats', formatsRouter);
+app.use('/records', recordsRouter);
 
 module.exports = app;
