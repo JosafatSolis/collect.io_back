@@ -29,15 +29,15 @@ const recordSchema = new Schema(
         type: {
           type: String,
           required: [true, "The field type has to be defined"],
-          enum: ["String", "Number", "Date"],
-          default: "Open",
+          enum: ["String", "Number", "Date", "Boolean"]
         },
         value: {
             type: Schema.Types.Mixed
         },
         stringValue: String,
         numberValue: Number,
-        dateValue: Schema.Types.Date
+        dateValue: Schema.Types.Date,
+        booleanValue: Boolean
       },
     ],
   },

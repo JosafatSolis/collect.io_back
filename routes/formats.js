@@ -13,71 +13,36 @@ router.get("/", verifyToken, function (req, res, next) {
     });
 });
 
+// GET A FORMAT FROM A CODE
+router.get("/:code", (req, res, next) => {
+  const { code } = req.params;
+  Format.findOne({ codes: code })
+    .then((found) => {
+      if (found) {
+        console.log("Encontrado!!", found);
+        res.status(200).json(found);
+      } else {
+        res.status(400).json({ error: "Code not found!" });
+      }
+    })
+    .catch((reason) => {
+      console.log("Error: ", reason);
+      res.status(400).json({ error: reason });
+    });
+});
+
 //CREATE A FORMAT
-router.post(
-    "/",
-    verifyToken,
-    (req, res, next) => {
-      Format.create(req.body)
-        .then((created) => {
-          res.status(200).json({ created });
-          console.log(created);
-        })
-        .catch((reason) => {
-          console.log("Error: ", reason);
-          res.status(400).json({ error: reason });
-        });
-    }
-  );
-
-
-// // REGRESA TODOS LOS DE UN TENANT_ID
-// router.get(
-//   "/bytenant/:tenant_id",
-//   verifyToken,
-//   checkRole(["User", "Tecnician", "Admin"]),
-//   (req, res, next) => {
-//     const { tenant_id } = req.params;
-//     Ticket.find({ tenant: tenant_id })
-//       .populate("clientUser", "email name lastName")
-//       .populate("tecnicianUser", "email name lastName")
-//       .then((found) => {
-//         if (found) {
-//           res.status(200).json(found);
-//         } else {
-//           res.status(200).json({});
-//         }
-//       })
-//       .catch((reason) => {
-//         // O que ocurra un error si el id no viene en el formato correcto.
-//         console.log("Error: ", reason);
-//         res.status(404).json({ error: reason });
-//       });
-//   }
-// );
-
-// // ++ EN PROCESO ++ REGRESAR TODOS LOS TICKETS ABIERTOS DE UN TENANT
-// router.get(
-//   "/bytenant/:tenant_id/open",
-//   verifyToken,
-//   checkRole(["User", "Tecnician", "Admin"]),
-//   (req, res, next) => {
-//     const { tenant_id } = req.params;
-//     Ticket.find({ tenant: tenant_id, status: "Open" })
-//       .then((found) => {
-//         if (found) {
-//           res.status(200).json(found);
-//         } else {
-//           res.status(200).json({});
-//         }
-//       })
-//       .catch((reason) => {
-//         // O que ocurra un error si el id no viene en el formato correcto.
-//         console.log("Error: ", reason);
-//         res.status(404).json({ error: reason });
-//       });
-//   }
-// );
+router.post("/", verifyToken, (req, res, next) => {
+  Format.create(req.body)
+    .then((created) => {
+      res.status(200).json({ created });
+      console.log(created);
+    })
+    .catch((reason) => {
+      console.log("Error: ", reason);
+      res.status(400).json({ error: reason });
+    });
+});
 
 // //ROUTE GET ID
 // router.get(
@@ -104,6 +69,30 @@ router.post(
 //   }
 // );
 
+// // REGRESA TODOS LOS DE UN TENANT_ID
+// router.get(
+//   "/bytenant/:tenant_id",
+//   verifyToken,
+//   checkRole(["User", "Tecnician", "Admin"]),
+//   (req, res, next) => {
+//     const { tenant_id } = req.params;
+//     Ticket.find({ tenant: tenant_id })
+//       .populate("clientUser", "email name lastName")
+//       .populate("tecnicianUser", "email name lastName")
+//       .then((found) => {
+//         if (found) {
+//           res.status(200).json(found);
+//         } else {
+//           res.status(200).json({});
+//         }
+//       })
+//       .catch((reason) => {
+//         // O que ocurra un error si el id no viene en el formato correcto.
+//         console.log("Error: ", reason);
+//         res.status(404).json({ error: reason });
+//       });
+//   }
+// );
 
 // // ASIGNAR UN TICKET A UN TECNICIAN
 // router.patch(

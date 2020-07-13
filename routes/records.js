@@ -14,7 +14,23 @@ router.get("/:format_id", verifyToken, function (req, res, next) {
     });
 });
 
-//CREATE A RECORD
+
+//CREATE A RECORD WITH THE FORMAT ID
+router.post("/:format", (req, res, next) => {
+    const { format } = req.params.format;
+    Record.create({ format, ...req.body })
+            .then((created) => {
+              res.status(200).json({ created });
+              console.log(created);
+            })
+            .catch((reason) => {
+              console.log("Error: ", reason);
+              res.status(400).json({ error: reason });
+            });
+  });
+  
+
+//CREATE A RECORD WITHOUT THE FORMAT ID
 router.post("/", (req, res, next) => {
   // Searches for the code to define the format
   const { code, ...recordFields } = req.body;

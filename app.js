@@ -30,9 +30,9 @@ const usersRouter = require('./routes/users');
 const formatsRouter = require('./routes/formats');
 const recordsRouter = require('./routes/records');
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/formats', formatsRouter);
-app.use('/records', recordsRouter);
+app.use('/api/', indexRouter);
+app.use('/api/users', usersRouter);
+app.use('/api/formats', formatsRouter);
+app.use('/api/records', recordsRouter);
 
 module.exports = app;
