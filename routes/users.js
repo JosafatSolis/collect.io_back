@@ -6,12 +6,13 @@ const jwt = require("jsonwebtoken");
 
 // LOGIN
 router.post("/login", (req, res, next) => {
+  console.log("Login...");
   const { email, password } = req.body;
   // Validar que existe el usuario
-  User.findOne({ email }).populate("tenant", "name code").then((user) => {
+  User.findOne({ email }).then((user) => {
     // Si no encontró al usuario
     if (user === null)
-      return res.status(404).json({ msg: "Email no encontrado" });
+      return res.status(404).json({ msg: "Email not found!" });
     // Si sí encontró al usuario, validamos contraseña
     bcrypt.compare(password, user.password).then((match) => {
       if (match) {

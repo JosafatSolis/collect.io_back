@@ -5,8 +5,21 @@ const Format = require("../models/Format");
 const { verifyToken } = require("../utils/auth");
 
 // GET ALL THE RECORDS FROM A FORMAT
-router.get("/:format_id", verifyToken, function (req, res, next) {
-  Record.find()
+router.get("/", verifyToken, function (req, res, next) {
+  // params: format, [codes], [from], [to]
+  console.log(req.query);
+  const { format, code, from, to } = req.query;
+
+  const query = { format };
+  if (code) query.code = code;
+  if (from && to)  {
+      query.createdAt = { $gte: `${from}`, $lte: `${to}` };
+    } else {
+        if (from) query.createdAt = { $gte: `${from}` };
+        if (to) query.createdAt = { $lte: `${to}` };
+    }
+
+  Record.find(query)
     .then((found) => res.status(200).json(found))
     .catch((reason) => {
       console.log("Error: ", reason);
@@ -14,21 +27,19 @@ router.get("/:format_id", verifyToken, function (req, res, next) {
     });
 });
 
-
 //CREATE A RECORD WITH THE FORMAT ID
 router.post("/:format", (req, res, next) => {
-    const { format } = req.params.format;
-    Record.create({ format, ...req.body })
-            .then((created) => {
-              res.status(200).json({ created });
-              console.log(created);
-            })
-            .catch((reason) => {
-              console.log("Error: ", reason);
-              res.status(400).json({ error: reason });
-            });
-  });
-  
+  const { format } = req.params.format;
+  Record.create({ format, ...req.body })
+    .then((created) => {
+      res.status(200).json({ created });
+      console.log(created);
+    })
+    .catch((reason) => {
+      console.log("Error: ", reason);
+      res.status(400).json({ error: reason });
+    });
+});
 
 //CREATE A RECORD WITHOUT THE FORMAT ID
 router.post("/", (req, res, next) => {
@@ -49,7 +60,7 @@ router.post("/", (req, res, next) => {
             res.status(400).json({ error: reason });
           });
       } else {
-          res.status(400).json({ error: "Code not found!" });
+        res.status(400).json({ error: "Code not found!" });
       }
     })
     .catch((reason) => {
